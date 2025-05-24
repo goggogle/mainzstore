@@ -1,0 +1,2430 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MainzStore</title>
+    <link rel="icon" href="images/logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* Reset some default styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #031b22;
+            color: #fffefe;
+            padding-bottom: 50px; /* To ensure content doesn't hide behind fixed footer */
+        }
+
+        header {
+            background-color: #003366; /* Dark Blue */
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;  /* Fixing the header */
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000; /* To make sure it's on top */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        header .logo img {
+            width: 150px; /* Set the width of the logo */
+        }
+
+        header .cart-icon {
+            font-size: 24px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        header .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -10px;
+            background-color: rgb(0, 195, 255);
+            color: rgb(255, 255, 255);
+            border-radius: 50%;
+            padding: 5px 10px;
+            font-size: 14px;
+        }
+
+        main {
+            padding: 80px 20px 20px 20px; /* Add padding to avoid overlap with fixed header */
+        }
+
+        /* Pencarian Produk */
+        .product-search {
+            margin: 40px 0 20px 0; /* Increased the margin-top to move it further down */
+            text-align: center;
+        }
+
+        .product-search input {
+            padding: 10px;
+            width: 80%;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .product-search button {
+            padding: 10px;
+            background-color: #003366;
+            color: rgb(255, 255, 255);
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 4px;
+            margin-left: 10px;
+        }
+
+        .product-search button:hover {
+            background-color: #002244;
+        }
+
+        /* Kategori Utama dengan Ikon */
+        .category-main {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .category-main .category-item {
+            background-color: #003366;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%; /* Ensure the item takes full width of grid */
+            height: 200px; /* Set a fixed height to make the items uniform */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .category-main .category-item i {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        /* List Produk yang muncul setelah kategori diklik */
+        .category-products {
+            display: none;
+            margin-top: 20px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .category-products .product {
+            background-color: rgb(0, 153, 255);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .category-products .product img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .product .price {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        footer {
+            background-color: #111;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            z-index: 1000; /* Ensure footer stays on top */
+        }
+
+        /* Keranjang Produk */
+        .cart-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Center the cart popup */
+            width: 400px; /* Adjust the width of the popup */
+            background-color: rgb(0, 0, 0);
+            color: white;
+            padding: 20px;
+            z-index: 1000;
+            border-radius: 8px;
+        }
+
+        .cart-popup .cart-content {
+            background-color: #003366;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .cart-popup .cart-items {
+            margin-bottom: 20px;
+        }
+
+        .cart-popup .cart-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .cart-popup .cart-item button {
+            background-color: red;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .cart-popup .total {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        /* Popup Modal Pilihan Tipe Produk - Lebih kecil dan di tengah */
+        .popup-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Menempatkan popup di tengah */
+            width: 350px; /* Lebih kecil */
+            background-color: rgb(0, 0, 0); /* Warna latar belakang sedikit transparan */
+            color: white;
+            padding: 20px;
+            z-index: 1000;
+            border-radius: 8px;
+        }
+
+        /* Konten popup */
+        .popup-modal .popup-content {
+            background-color: #003366;
+            padding: 20px;
+            border-radius: 8px;
+            max-height: 90%;
+            overflow-y: auto;
+        }
+
+        /* Header Popup */
+        .popup-modal .popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Tombol tutup */
+        .popup-modal .close-btn {
+            font-size: 24px;
+            cursor: pointer;
+            color: white;
+            background-color: #003366;
+            border: none;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        /* Isi popup */
+        .popup-modal .popup-body {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        /* Metode Pembayaran */
+        .payment-methods {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .payment-methods button {
+            padding: 10px;
+            background-color: #003366;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        footer {
+    background-color: #003366; /* Dark blue background */
+    color: white;
+    padding: 20px;
+    text-align: center;
+    position: relative; /* Ensures it appears below the content */
+    bottom: 0;
+    width: 100%;
+    margin-top: 50px; /* Adds space above footer */
+        }
+
+        .footer-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .footer-logo {
+            width: 30%;
+        }
+
+        .footer-logo img {
+            width: 150px; /* Resize logo */
+            margin-bottom: 20px;
+        }
+
+        .footer-logo p {
+            font-size: 14px;
+            margin: 0;
+            color: #f4f4f4;
+        }
+
+        .footer-nav {
+            width: 60%;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .footer-links, .footer-social {
+            width: 45%;
+        }
+
+        .footer-links h4, .footer-social h4 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .footer-links ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links ul li {
+            margin: 5px 0;
+        }
+
+        .footer-links ul li a {
+            text-decoration: none;
+            color: #f4f4f4;
+        }
+
+        .footer-links ul li a:hover {
+            color: #00a2ff; /* Gold color when hovering */
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .social-icons a {
+            color: white;
+            font-size: 24px;
+            text-decoration: none;
+        }
+
+        .social-icons a:hover {
+            color: #00a2ff; /* Gold color when hovering */
+        }
+
+        @media (max-width: 768px) {
+            .footer-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .footer-logo, .footer-nav {
+                width: 100%;
+                text-align: center;
+            }
+
+            .footer-nav {
+                margin-top: 20px;
+            }
+
+            .footer-links, .footer-social {
+                width: 100%;
+            }
+        }
+
+        .footer-social {
+        text-align: center;
+        margin-top: 20px;
+        }
+
+        .footer-social .social-icons {
+            display: flex;
+            justify-content: center;  /* Mengatur agar ikon berada di tengah */
+            gap: 20px;  /* Memberikan jarak antar ikon */
+        }
+
+        .footer-social .social-icons a {
+            color: white;
+            font-size: 24px; /* Ukuran ikon */
+            text-decoration: none; /* Menghilangkan garis bawah */
+        }
+
+        .footer-social .social-icons a:hover {
+            color: #00a2ff; /* Memberikan efek warna saat hover */
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            position: relative;
+            padding-bottom: 5px;
+            display: inline-block;
+        }
+
+        .footer-links a::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #00a2ff; /* Warna oranye untuk garis bawah */
+            transform: scaleX(0);
+            transform-origin: bottom right;
+            transition: transform 0.25s ease-out;
+        }
+
+        .footer-links a:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+
+        .footer-links a:hover {
+            color: #00a2ff; /* Ganti warna teks menjadi oranye saat hover */
+        }
+
+        /* Popup Full-Screen Style */
+        .popup-fullscreen {
+            display: none; /* Initially hide the popup */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent black background */
+            color: white;
+            z-index: 1001;
+            overflow: auto; /* Allow scrolling if content overflows */
+        }
+
+        .popup-content {
+            background-color: #003366; /* Dark blue background for popup */
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            height: 80%;
+            margin: auto;
+            overflow-y: auto; /* Add scrolling if needed */
+        }
+
+        .popup-content h2 {
+            text-align: center;
+        }
+
+        .popup-content button.close-btn {
+            font-size: 24px;
+            cursor: pointer;
+            color: white;
+            background-color: red;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        /* Centered text inside the popup */
+        .popup-content p {
+            text-align: center;
+            font-size: 18px;
+        }
+
+        /* Styling untuk tabel di dalam pop-up */
+        .price-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .price-table th, .price-table td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        .price-table th {
+            background-color: #003366;
+            color: white;
+        }
+
+        .price-table td img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+        }
+
+        .price-table td .status-on {
+            color: green;
+            font-weight: bold;
+        }
+
+        .price-table td .status-off {
+            color: red;
+            font-weight: bold;
+        }
+
+
+        /* Responsiveness for smaller devices */
+        @media (max-width: 768px) {
+            /* Aturan agar kategori dan produk tetap rapi di mobile */
+            .category-main {
+                grid-template-columns: repeat(2, 1fr); /* 2 kolom di mobile */
+            }
+
+            .category-products {
+                grid-template-columns: repeat(2, 1fr); /* 2 kolom di mobile */
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="images/RDAW.png" alt="MainzStore Logo">
+        </div>
+        <div class="cart-icon" onclick="openCart()">
+            <i class="fa fa-shopping-cart"></i>
+            <div class="cart-count" id="cart-count">0</div>
+        </div>
+    </header>
+    
+    <main>
+        <!-- Pencarian Produk -->
+        <div class="product-search">
+            <input type="text" id="search-box" placeholder="Cari produk..." onkeyup="searchProducts()">
+            <button onclick="searchProducts()">Cari</button>
+        </div>
+
+        <!-- Kategori Utama dengan Ikon -->
+        <div class="category-main">
+            <div class="category-item" onclick="toggleCategoryProducts('gamePC')">
+                <i class="fa fa-gamepad"></i>
+                <h3>Game PC</h3>
+            </div>
+            <div class="category-item" onclick="toggleCategoryProducts('premium')">
+                <i class="fa fa-crown"></i>
+                <h3>Premium</h3>
+            </div>
+            <div class="category-item" onclick="toggleCategoryProducts('cheatVIP')">
+                <i class="fa fa-shield-alt"></i>
+                <h3>Cheat VIP</h3>
+            </div>
+            <div class="category-item" onclick="toggleCategoryProducts('software')">
+                <i class="fa fa-cogs"></i>
+                <h3>Software</h3>
+            </div>
+        </div>
+
+            <!-- Game PC Products Added -->
+           <div id="gamePC" class="category-products">
+            <!-- Feed and Grow Fish -->
+        <div class="product">
+            <img src="images/Feed-and-Grow-Fish-pc-free-download.jpg" alt="Feed Fish">
+            <h4>Feed Fish</h4>
+            <p class="price">Tipe File & Original</p>
+            <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('Feed Fish', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+        </div>
+        
+        <!-- Laundry Store Simulator -->
+        <div class="product">
+            <img src="images/Laundry-Store-Simulator-pc-free-download.jpg" alt="Laundry">
+            <h4>Laundry</h4>
+            <p class="price">Tipe File & Original</p>
+            <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('Laundry', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+        </div>
+        
+        <!-- Parking Tycoon -->
+        <div class="product">
+            <img src="images/Parking-Tycoon-Business-Simulator-pc-free-download.jpg" alt="Parking Tycoon">
+            <h4>Parking Tycoon</h4>
+            <p class="price">Tipe File & Original</p>
+            <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('Parking Tycoon', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+        </div>
+        
+        <!-- PowerWash -->
+        <div class="product">
+            <img src="images/PowerWash-Simulator-pc-free-download.jpg" alt="PowerWash">
+            <h4>PowerWash</h4>
+            <p class="price">Tipe File & Original</p>
+            <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('PowerWash', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+        </div>
+        
+        <!-- Zomboid -->
+        <div class="product">
+            <img src="images/Project-Zomboid-pc-free-download.jpg" alt="Zomboid">
+            <h4>Zomboid</h4>
+            <p class="price">Tipe File & Original</p>
+            <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('Zomboid', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+        </div>
+        
+        <!-- Storage Hunter -->
+        <div class="product">
+            <img src="images/Storage-Hunter-Simulator-pc-free-download.jpg" alt="Storage Hunter">
+            <h4>Storage Hunter</h4>
+            <p class="price">Tipe File & Original</p>
+            <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('Storage Hunter', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+        </div>
+        
+        <!-- Storage Hustle -->
+        <div class="product">
+            <img src="images/Storage-Hustle-pc-free-download.jpg" alt="Storage Hustle">
+            <h4>Storage Hustle</h4>
+            <p class="price">Tipe File & Original</p>
+            <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('Storage Hustle', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+        </div>
+        
+        <!-- Subnautica BZ -->
+        <div class="product">
+            <img src="images/Subnautica-Below-Zero-pc-free-download.jpg" alt="Subnautica BZ">
+            <h4>Subnautica BZ</h4>
+            <p class="price">Tipe File & Original</p>
+            <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('Subnautica BZ', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+        </div>
+        
+        <!-- Car Sale 2023 -->
+        <div class="product">
+            <img src="images/Car-For-Sale-Simulator-2023-pc-free-download.jpg" alt="Car Sale 2023">
+            <h4>Car Sale 2023</h4>
+            <p class="price">Tipe File & Original</p>
+            <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('Car Sale 2023', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+        </div>
+        
+        <!-- Factory Outlet -->
+        <div class="product">
+            <img src="images/Factory-Outlet-Simulator-pc-free-download.jpg" alt="Factory Outlet">
+            <h4>Factory Outlet</h4>
+            <p class="price">Tipe File & Original</p>
+            <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('Factory Outlet', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+        </div>
+        
+        <!-- Goat Sim -->
+        <div class="product">
+            <img src="images/Goat-Simulator-pc-free-download.jpg" alt="Goat Sim">
+            <h4>Goat Sim</h4>
+            <p class="price">Tipe File & Original</p>
+            <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('Goat Sim', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+        </div>
+        
+        <!-- Gym Sim 24 -->
+        <div class="product">
+            <img src="images/Gym-Simulator-24-pc-free-download.jpg" alt="Gym Sim 24">
+            <h4>Gym Sim 24</h4>
+            <p class="price">Tipe File & Original</p>
+            <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('Gym Sim 24', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+        </div>
+        
+        <!-- Goat Sim 3 -->
+        <div class="product">
+            <img src="images/Goat-Simulator-3-pc-free-download.jpg" alt="Goat Sim 3">
+            <h4>Goat Sim 3</h4>
+            <p class="price">Tipe File & Original</p>
+            <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('Goat Sim 3', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+        </div>
+
+            <!-- Troublemaker -->
+            <div class="product">
+                <img src="images/Troublemaker-pc-free-download.jpg" alt="Troublemaker">
+                <h4>Troublemaker</h4>
+                <p class="price">Tipe File & Original</p>
+               <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+            </div>
+
+            <!-- Police Simulator -->
+            <div class="product">
+                <img src="images/Police-Simulator-Patrol-Officers-pc-free-download.jpg" alt="Police Simulator">
+                <h4>Police Sim</h4>
+                <p class="price">Tipe File & Original</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+            </div>
+
+            <!-- Hot Wheels Unleashed -->
+            <div class="product">
+                <img src="images/HOT-WHEELS-UNLEASHED-pc-free-download.jpg" alt="Hot Wheels Unleashed">
+                <h4>Hot Wheels U</h4>
+                <p class="price">Tipe File & Original</p>
+               <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+            </div>
+
+            <!-- Hot Wheels Unleashed 2 -->
+            <div class="product">
+                <img src="images/HOT-WHEELS-UNLEASHED-2-Turbocharged-pc-free-download.jpg" alt="Hot Wheels Unleashed 2">
+                <h4>Hot Wheels U2</h4>
+                <p class="price">Tipe File & Original</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+            </div>
+
+            <!-- Hot Wheels Monster Trucks -->
+            <div class="product">
+                <img src="images/Hot-Wheels-Monster-Trucks-Stunt-Mayhem-pc-free-download.jpg" alt="Hot Wheels Monster Trucks">
+                <h4>Hot Wheels MT</h4>
+                <p class="price">Tipe File & Original</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+            </div>
+
+            <!-- Gas Station Simulator -->
+            <div class="product">
+                <img src="images/Gas-Station-Simulator-pc-free-download.jpg" alt="Gas Station Simulator">
+                <h4>Gas Station S</h4>
+                <p class="price">Tipe File & Original</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+            </div>
+
+            <!-- Five Hearts Under One Roof -->
+            <div class="product">
+                <img src="images/Five-Hearts-Under-One-Roof-pc-free-download.jpg" alt="Five Hearts Under One Roof">
+                <h4>5 Hearts</h4>
+                <p class="price">Tipe File & Original</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+            </div>
+
+            <!-- Fight School Simulator -->
+            <div class="product">
+                <img src="images/Fight-School-Simulator-pc-free-download.jpg" alt="Fight School Simulator">
+                <h4>Fight School</h4>
+                <p class="price">Tipe File & Original</p>
+               <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+            </div>
+
+            <!-- Empires of the Undergrowth -->
+            <div class="product">
+                <img src="images/Empires-Of-The-Undergrowth-pc-free-download.jpg" alt="Empires of the Undergrowth">
+                <h4>Empires of the U</h4>
+                <p class="price">Tipe File & Original</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+            </div>
+
+            <!-- Animal Revolt Battle Simulator -->
+            <div class="product">
+                <img src="images/Animal-Revolt-Battle-Simulator-pc-free-download.jpg" alt="Animal Revolt Battle Simulator">
+                <h4>ARBS</h4>
+                <p class="price">Tipe File & Original</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+            </div>
+
+           <!-- minecraft -->
+            <div class="product">
+                <img src="images/game_minecraft_java_and_bedrock_edition_original_pc_redeem_code_full01_q17kqtkg.webp" alt="Minecraft">
+                <h4>Minecraft</h4>
+                <p class="price">Tipe File & Original</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+            </div>           
+
+            <!-- Inzoi -->
+            <div class="product">
+                <img src="images/inzoi.jpg" alt="Inzoi">
+                <h4>Inzoi</h4>
+                <p class="price">Tipe File & Original</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+            </div>
+
+            <!-- SUPERCAR -->
+            <div class="product">
+                <img src="images/Supercar-Collection-Simulator-pc-free-download.jpg" alt="SUPERCAR">
+                <h4>SUPERCAR</h4>
+                <p class="price">Tipe File & Original</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+            </div>
+
+            <!-- Schedule I -->
+            <div class="product">
+                <img src="images/Schedule.jpg" alt="Schedule I">
+                <h4>Schedule I</h4>
+                <p class="price">Tipe File & Original</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+            </div>
+
+            <!-- Raft -->
+            <div class="product">
+                <img src="images/Raft-pc-free-download.jpg" alt="Raft">
+                <h4>Raft</h4>
+                <p class="price">Tipe File & Original</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+            </div>
+
+            <!-- Supermarket -->
+            <div class="product">
+                <img src="images/Supermarket-Simulator-pc-free-download.jpg" alt="Supermarket">
+                <h4>Supermarket</h4>
+                <p class="price">Tipe File & Original</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+            </div>
+
+            <!-- TCG -->
+            <div class="product">
+                <img src="images/TCG-Card-Shop-Simulator-pc-free-download.jpg" alt="TCG">
+                <h4>TCG</h4>
+                <p class="price">Tipe File & Original</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+            </div>
+
+            <!-- Thief -->
+            <div class="product">
+                <img src="images/Thief-Simulator-pc-free-download.jpg" alt="Thief">
+                <h4>Thief</h4>
+                <p class="price">Tipe File & Original</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+            </div>
+
+            <!-- Internet -->
+            <div class="product">
+                <img src="images/Internet-Cafe-Simulator-pc-download.jpg" alt="Internet">
+                <h4>Internet</h4>
+                <p class="price">Tipe File & Original</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+            </div>
+
+            <!-- Internet 2 -->
+            <div class="product">
+                <img src="images/Internet-Cafe-Simulator-2-pc-free-download.jpg" alt="Internet 2">
+                <h4>Internet 2</h4>
+                <p class="price">Tipe File & Original</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+            </div>
+
+            <!-- Pumping 2 -->
+            <div class="product">
+                <img src="images/Pumping-Simulator-2-pc-free-download.jpg" alt="Pumping 2">
+                <h4>Pumping 2</h4>
+                <p class="price">Tipe File & Original</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+            </div>
+            <!-- Motel -->
+            <div class="product">
+                <img src="images/Motel-Manager-Simulator-pc-free-download.jpg" alt="Motel">
+                <h4>Motel</h4>
+                <p class="price">Tipe File & Original</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+            </div>
+
+            <!-- Clothing Store -->
+            <div class="product">
+                <img src="images/Clothing-Store-Simulator-pc-free-download.jpg" alt="Clothing Store">
+                <h4>Clothing Store</h4>
+                <p class="price">Tipe File & Original</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+            </div>
+
+            <!-- Euro 2 -->
+            <div class="product">
+                <img src="images/Euro-Truck-Simulator-2-pc-free-download.jpg" alt="Euro 2">
+                <h4>Euro 2</h4>
+                <p class="price">Tipe File & Original</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+            </div>
+
+            <!-- GTA V -->
+            <div class="product">
+                <img src="images/gta v.png" alt="GTA V">
+                <h4>GTA V</h4>
+                <p class="price">Tipe File & Original</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+            </div>
+
+            <!-- GTA IV -->
+            <div class="product">
+                <img src="images/gta 4.jpg" alt="GTA IV">
+                <h4>GTA IV</h4>
+                <p class="price">Tipe File & Original</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+            </div>
+
+            <!-- GTA III -->
+            <div class="product">
+                <img src="images/gta 3.png" alt="GTA III">
+                <h4>GTA III</h4>
+                <p class="price">Tipe File & Original</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+            </div>
+
+            <!-- GTA VC -->
+            <div class="product">
+                <img src="images/gta vc.png" alt="GTA Vice City">
+                <h4>GTA VC</h4>
+                <p class="price">Tipe File & Original</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+            </div>
+
+            <!-- GTA SA -->
+            <div class="product">
+                <img src="images/gta sa bisasah.png" alt="GTA San Andreas">
+                <h4>GTA SA</h4>
+                <p class="price">Tipe File & Original</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+            </div>
+
+            <!-- GTA SA Trilogy -->
+            <div class="product">
+                <img src="images/gta sa the.png" alt="GTA SA Trilogy">
+                <h4>GTA SA Trilogy</h4>
+                <p class="price">Tipe File & Original</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+            </div>
+
+        </div>
+    </main>
+
+
+        <div id="premium" class="category-products">
+            <!-- Added Premium Products with Prices -->
+
+            <!-- WTV -->
+            <div class="product">
+                <img src="images/wtv.png" alt="WTV">
+                <h4>WTV</h4>
+                <p class="price">SARING & PRIVATE</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('WTV', ['Saring I Bulan Rp 15.000', 'Privat I Bulan Rp 25.000'])">ORDER</button>
+            </div>
+
+            <!-- YouTube -->
+            <div class="product">
+                <img src="images/yt-6273367_1280.webp" alt="YouTube">
+                <h4>YouTube</h4>
+                <p class="price">SHARING</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('YouTube', ['I Bulan Rp 25,000', 'I Bulan Rp 65,000'])">ORDER</button>
+            </div>
+
+            <!-- Netflix -->
+            <div class="product">
+                <img src="images/netflix.png" alt="Netflix">
+                <h4>Netflix</h4>
+                <p class="price">PRIVATE</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('Netflix', ['I Bulan Private Rp 25,000', 'I Bulan Private Rp 35,000'])">ORDER</button>
+            </div>
+
+            <!-- Bstation -->
+            <div class="product">
+                <img src="images/bstation.png" alt="BSTATION">
+                <h4>BSTATION</h4>
+                <p class="price">SHARING</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('BSTATION', ['I Bulan Rp 25,000'])">ORDER</button>
+            </div>
+
+            <!-- Spotify -->
+            <div class="product">
+                <img src="images/spotify.png" alt="Spotify">
+                <h4>Spotify</h4>
+                <p class="price">PRIVATE</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('Spotify', ['I Bulan Rp 25,000', 'II Bulan Rp 35,000', 'IV Bulan Rp 55,000', 'VI Bulan Rp 80,000', 'XII Bulan Rp 110,000'])">ORDER</button>
+            </div>
+
+            <!-- DRAMABOX -->
+            <div class="product">
+                <img src="images/th (4).jfif" alt="DRAMABOX">
+                <h4>DRAMABOX</h4>
+                <p class="price">Mulai Harga 25k</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('DRAMABOX', ['I BULAN PRIVATE Rp 25,000', 'II BULAN PRIVATE Rp 45,000', 'I BULAN SARING Rp 15,000', 'II BULAN SHARING Rp 28,000'])">ORDER</button>
+            </div>
+
+            <!-- CAPCUT -->
+            <div class="product">
+                <img src="images/Logo Aplikasi Capcut.png" alt="CAPCUT">
+                <h4>CAPCUT</h4>
+                <p class="price">SHARING FULL GARANSI</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('CAPCUT', ['I BULAN 25,000', 'I TAHUN 100,000'])">ORDER</button>
+            </div>
+
+            <!-- VISION+ -->
+            <div class="product">
+                <img src="images/Vision-APK-Logo-1.png" alt="VISION+">
+                <h4>VISION+</h4>
+                <p class="price">SHARING</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('VISION+', ['I BULAN 15,000','III BULAN 26,000','VI BULAN 50,000',])">ORDER</button>
+            </div>
+
+            <!-- GETCONTACT -->
+            <div class="product">
+                <img src="images/Getcontac.png" alt="GETCONTACT">
+                <h4>GETCONTACT</h4>
+                <p class="price">Rp Full Garansi</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('GETCONTACT', ['I BULAN 25,000',])">ORDER</button>
+            </div>
+
+            <!-- CANVA -->
+            <div class="product">
+                <img src="images/th.jpg" alt="CANVA">
+                <h4>CANVA</h4>
+                <p class="price">Full Garansi</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('CANVA', ['I BULAN 15,000','II BULAN 25,000','III BULAN 35,000','I TAHUN 55,000'])">ORDER</button>
+            </div>
+
+            <!-- CHAT GPT -->
+            <div class="product">
+                <img src="images/black-gpt-chat-logo-on-white-background-logo-illustration-free-vector.jpg" alt="CHAT GPT">
+                <h4>CHAT GPT</h4>
+                <p class="price">Full Garansi</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('CHAT GPT', ['I BULAN 25,000'])">ORDER</button>
+            </div>
+
+        </div>
+                
+        <!-- Kategori Cheat VIP Produk -->
+        <div id="cheatVIP" class="category-products">
+            <!-- MLBB -->
+            <div class="product">
+                <img src="images/mlbb.jpg" alt="MLBB">
+                <h4>MLBB</h4>
+                <p class="price">😁 APLIKASI SKIN EXPIRED YA...🥲</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('MLBB', ['I BULAN Rp 70.000', 'XV Day Rp 50.000', 'I MINGU Rp 35.000'])">ORDER</button>
+            </div>
+            <!-- MLBB -->
+            <div class="product">
+                <img src="images/mlbb.jpg" alt="MLBB">
+                <h4>MLBB</h4>
+                <p class="price">🛍️VIP FULL FITUR</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('MLBB', ['I Tahun Rp 400.000','I BULAN Rp 70.000', 'XV Day Rp 50.000', 'I MINGU Rp 35.000'])">ORDER</button>
+            </div>
+                        <!-- MLBB -->
+            <div class="product">
+                <img src="images/mlbb.jpg" alt="MLBB">
+                <h4>MLBB</h4>
+                <p class="price">🛍️RANK BOOSTER VIP + GB MMR</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('MLBB', ['I Tahun Rp 700.000','I BULAN Rp 70.000', 'XV Day Rp 50.000', 'I MINGU Rp 35.000'])">ORDER</button>
+            </div>
+            <!-- PUBG -->
+            <div class="product">
+                <img src="images/images.jpg" alt="PUBG">
+                <h4>PUBG</h4>
+                <p class="price">🛍️FILE BODY COLLOR , NO GRASS NO SMOK</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('PUBG', ['I-III SESOUN IDR 250.000', ' III TAHUN IDR 900.000,'])">ORDER</button>
+            </div>
+        </div>
+
+                <!-- Kategori Software Produk -->
+        <div id="software" class="category-products">
+            <!-- PS -->
+            <div class="product">
+                <img src="images/pt.png" alt="PHOTOSHOP">
+                <h4>PHOTOSHOP</h4>
+                <p class="price">TIPE FILE</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('PHOTOSHOP', ['PERMANET Rp 25.000'])">ORDER</button>
+            </div>
+            <!-- Illustrator  -->
+            <div class="product">
+                <img src="images/adobe-illustrator-5977785_1280.webp" alt="ILLUSTRATOR">
+                <h4>ILLUSTRATOR</h4>
+                <p class="price">TIPE FILE</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('ILLUSTRATOR', ['PERMANET Rp 25.000'])">ORDER</button>
+            </div>
+            <!-- InDesign  -->
+            <div class="product">
+                <img src="images/adobe-id-5.png" alt="INDESIGN">
+                <h4>INDESIGN</h4>
+                <p class="price">TIPE FILE</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('INDESIGN', ['PERMANET Rp 25.000'])">ORDER</button>
+            </div>
+            <!-- Premiere Pro -->
+            <div class="product">
+                <img src="images/pr.png" alt="PREMIERE-PRO">
+                <h4>PREMIERE PRO</h4>
+                <p class="price">TIPE FILE</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('MLBBPREMIERE-PRO', ['PERMANET Rp 25.000'])">ORDER</button>
+            </div>
+                        <!-- After Effects -->
+            <div class="product">
+                <img src="images/AE.png" alt="AFTER-Effects">
+                <h4>AFTER EFFECTS</h4>
+                <p class="price">TIPE FILE</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('AFTER-Effects', ['PERMANET Rp 25.000'])">ORDER</button>
+            </div>
+                        <!-- Audition -->
+            <div class="product">
+                <img src="images/au.png" alt="AUDITION">
+                <h4>AUDITION</h4>
+                <p class="price">TIPE FILE</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('AUDITION', ['PERMANET Rp 25.000'])">ORDER</button>
+            </div>
+                        <!-- Lightroom -->
+            <div class="product">
+                <img src="images/lr.webp" alt="LIGHTROOM">
+                <h4>LIGHTROOM</h4>
+                <p class="price">TIPE FILE</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('LIGHTROOM', ['PERMANET Rp 25.000'])">ORDER</button>
+            </div>
+                 <!-- IDMI -->
+            <div class="product">
+                <img src="images/idm.jpg" alt="IDM">
+                <h4>IDM</h4>
+                <p class="price">TIPE FILE</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('IDM', ['PERMANET Rp 25.000'])">ORDER</button>
+            </div>
+                             <!-- COREL -->
+            <div class="product">
+                <img src="images/CorelDRAW-2021-Splash.png" alt="CORELDRAW-7">
+                <h4>CORELDRAW 7</h4>
+                <p class="price">TIPE FILE</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('CORELDRAW-7', ['PERMANET Rp 25.000'])">ORDER</button>
+            </div>
+                               <!-- COREL -->
+            <div class="product">
+                <img src="images/CorelDRAW-2021-Splash.png" alt="CORELDRAW8">
+                <h4>CORELDRAW 87</h4>
+                <p class="price">TIPE FILE</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('CORELDRAW8', ['PERMANET Rp 25.000'])">ORDER</button>
+            </div>
+                                          <!-- ADOBE -->
+            <div class="product">
+                <img src="images/AD.png" alt="ADOBE">
+                <h4>ADOBE</h4>
+                <p class="price">ORIGINAL BUKAN CRACK</p>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('ADOBE', ['VIX Day Rp 50.000', 'I Bulan Rp 80.000'])">ORDER</button>
+            </div>
+        </div>
+    </main>
+    <!-- Popup Pilihan Tipe Produk -->
+    <div class="popup-modal" id="productPopup">
+        <div class="popup-content">
+            <div class="popup-header">
+                <h2>ORDER</h2>
+                <button class="close-btn" onclick="closeProductPopup()">X</button>
+            </div>
+            <div class="popup-body" id="popup-options"></div>
+        </div>
+    </div>
+
+    <!-- Keranjang Belanja -->
+    <div class="cart-popup" id="cartPopup">
+        <div class="cart-content">
+            <h2>Keranjang Belanja</h2>
+            <div id="cart-items"></div>
+            <div class="total">
+                Total: <span id="total-price">Rp 0</span>
+            </div>
+            <h4>Lakukan pembayaran, screenshot, lalu kirim di bawah.</h4>
+            <h4>Pilih Metode Pembayaran</h4>
+            <h4>[ A/N : BUDI ARDIAN ]</h4>
+            <div class="payment-methods">
+                <button onclick="showPaymentInfo('dana')">Dana</button>
+                <button onclick="showPaymentInfo('shopeepay')">ShopeePay</button>
+                <button onclick="showPaymentInfo('paypal')">PayPal</button>
+                <button onclick="showPaymentInfo('qris')">QRIS</button>
+            </div>
+            <div id="payment-info"></div>
+
+            <button onclick="checkout()">Kirim</button>
+            <button onclick="closeCart()">Tutup</button>
+        </div>
+    </div>
+
+    <script>
+        let cart = [];
+        let cartCount = document.getElementById('cart-count');
+        let cartItems = document.getElementById('cart-items');
+        let totalPrice = document.getElementById('total-price');
+        let productPopup = document.getElementById('productPopup');
+        let popupOptions = document.getElementById('popup-options');
+
+        // Fungsi untuk menambahkan produk ke keranjang
+        function addToCart(productName, productPrice) {
+            cart.push({ name: productName, price: productPrice });
+            cartCount.innerText = cart.length; // Update cart count
+            displayCartItems();
+            updateTotalPrice();
+        }
+
+        // Fungsi untuk menampilkan item di keranjang
+        function displayCartItems() {
+            cartItems.innerHTML = ''; // Kosongkan daftar item di keranjang
+            cart.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.classList.add('cart-item');
+                div.innerHTML = `
+                    <p>${item.name} - Rp ${item.price.toLocaleString()}</p>
+                    <button onclick="removeItem(${index})">Hapus</button>`;
+                cartItems.appendChild(div);
+            });
+        }
+
+        // Fungsi untuk menghapus item dari keranjang
+        function removeItem(index) {
+            cart.splice(index, 1); // Menghapus item berdasarkan index
+            cartCount.innerText = cart.length; // Update jumlah item di keranjang
+            displayCartItems(); // Tampilkan ulang item keranjang
+            updateTotalPrice(); // Update total harga
+        }
+
+        // Fungsi untuk menghitung dan menampilkan total harga
+        function updateTotalPrice() {
+            let total = 0;
+            cart.forEach(item => {
+                total += item.price; // Tambahkan harga dari setiap item ke total
+            });
+            totalPrice.innerText = `Rp ${total.toLocaleString()}`;
+        }
+
+        // Fungsi untuk membuka popup produk dan menampilkan pilihan harga
+        function openProductOptions(productName, prices) {
+            popupOptions.innerHTML = ''; // Kosongkan opsi sebelumnya
+
+            prices.forEach(price => {
+                const button = document.createElement('button');
+                button.innerText = price;
+                button.onclick = () => {
+                    const priceValue = parseInt(price.replace(/[^\d]/g, '')); // Ambil angka harga dari string
+                    addToCart(productName, priceValue); // Tambahkan ke keranjang
+                };
+                popupOptions.appendChild(button);
+            });
+
+            // Tampilkan popup produk
+            productPopup.style.display = "block";
+        }
+
+        // Fungsi untuk menutup popup produk
+        function closeProductPopup() {
+            productPopup.style.display = "none";
+        }
+
+        // Fungsi untuk membuka keranjang
+        function openCart() {
+            cartPopup.style.display = "block";
+        }
+
+        // Fungsi untuk menutup keranjang
+        function closeCart() {
+            cartPopup.style.display = "none";
+        }
+
+        // Fungsi checkout (mengarahkan ke WhatsApp)
+        function checkout() {
+            const totalAmount = cart.reduce((total, item) => total + item.price, 0); // Hitung total harga
+            const message = `Hai, saya ingin membeli barang berikut:\n\n` +
+                cart.map(item => `${item.name} - Rp ${item.price.toLocaleString()}`).join('\n') +
+                `\n\nTotal: Rp ${totalAmount.toLocaleString()}`;
+
+            const phoneNumber = "6285124166472"; // Nomor WhatsApp
+            const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+            window.open(url, "_blank");
+        }
+
+        // Fungsi untuk menampilkan informasi pembayaran
+        function showPaymentInfo(method) {
+            let paymentInfo = document.getElementById('payment-info');
+            
+            if (method === 'dana') {
+                paymentInfo.innerHTML = `
+                    <p>Silakan kirim pembayaran ke nomor Dana saya:</p>
+                    <p><strong>0851-2416-6472</strong></p>
+                `;
+            } else if (method === 'shopeepay') {
+                paymentInfo.innerHTML = `
+                    <p>Silakan kirim pembayaran ke nomor ShopeePay saya:</p>
+                    <p><strong>0851-2416-6472</strong></p>
+                `;
+            } else if (method === 'paypal') {
+                paymentInfo.innerHTML = `
+                    <p>Silakan kirim pembayaran ke akun PayPal saya:</p>
+                    <p><strong>budiardian214@gmail.com</strong></p>
+                `;
+            } else if (method === 'qris') {
+                paymentInfo.innerHTML = `
+                    <p>Scan QRIS berikut untuk pembayaran:</p>
+                    <img src="images/qr.jpg" alt="QRIS Payment" width="100"> <!-- Adjust width -->
+                `;
+            }
+        }
+
+        // Fungsi untuk menampilkan produk berdasarkan kategori yang diklik
+        function toggleCategoryProducts(categoryId) {
+            const categoryProducts = document.getElementById(categoryId);
+            categoryProducts.style.display = categoryProducts.style.display === 'grid' ? 'none' : 'grid';
+        }
+
+        // Fungsi untuk pencarian produk
+        function searchProducts() {
+            const query = document.getElementById('search-box').value.toLowerCase();
+            const products = document.querySelectorAll('.product');
+
+            products.forEach(product => {
+                const productName = product.querySelector('h4').innerText.toLowerCase();
+                if (productName.includes(query)) {
+                    product.style.display = 'block';
+                } else {
+                    product.style.display = 'none';
+                }
+            });
+        }
+    </script>
+
+        <!-- Footer -->
+        <footer>
+            <div class="footer-container">
+                <div class="footer-logo">
+                    <img src="images/RDAW.png" alt="MainzStore Logo">
+                    <p>Mainz Store</p>
+                    <p>Tempat game pc murah, voucher, langganan dan software. Proses cepat aman dan terpercaya order di sini. Banyak pilihan game, langganan premium original.</p>
+                </div>
+                <div class="footer-nav">
+                    <div class="footer-links">
+                        <h4>Halaman</h4>
+                        <ul>
+                            <li><a href="#">Halaman Utama</a></li>
+                            <li><a href="#" onclick="openPopup('help')">Help</a></li> <!-- Mengubah 'Cek Pesanan' menjadi 'Help' -->
+                            <li><a href="#" onclick="openPopup('price')">Daftar Harga</a></li> <!-- Menambahkan link untuk Daftar Harga -->
+                            <li><a href="#" onclick="openPopup('terms')">Syarat & Ketentuan</a></li> <!-- Menambahkan link untuk Syarat & Ketentuan -->
+                        </ul>
+                    </div>
+                    <div class="footer-social">
+                        <h4>Tentang Kami</h4>
+                        <div class="social-icons">
+                            <a href="https://wa.me/6283143135784" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                            <a href="https://discord.gg/p92erCbJ2H" target="_blank"><i class="fab fa-discord"></i></a>
+                            <a href="https://youtube.com/@mainzstore1?si=G-TZfryyy603mdKg" target="_blank"><i class="fab fa-youtube"></i></a>
+                            <a href="https://t.me/zaputra1" target="_blank"><i class="fab fa-telegram"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 Mainz Store. All Rights Reserved.</p>
+            </div>
+        </footer>
+
+        <!-- Popup Full-Screen Help -->
+           <div id="help-popup" class="popup-fullscreen">
+                <div class="popup-content">
+                    <button class="close-btn" onclick="closePopup()">X</button>
+                    <h2>Bantuan Penggunaan Website</h2>
+
+                    <h3>🛍️ Apa itu MainzStore?</h3>
+                    <p>
+                    MainzStore adalah website yang menyediakan berbagai produk digital seperti game PC, software original & file, cheat VIP, serta layanan digital lainnya. Website ini dirancang untuk mudah digunakan siapa saja.
+                    </p>
+
+                    <h3>🧭 Cara Menavigasi Website</h3>
+                    <ol>
+                    <li>Pada halaman utama, kamu akan melihat berbagai kategori: <strong>Cheat VIP, Software, Game, Tools</strong>, dll.</li>
+                    <li>Gunakan tombol kategori untuk menampilkan produk yang sesuai.</li>
+                    <li>Setiap produk ditampilkan dalam bentuk kotak yang berisi:
+                        <ul>
+                        <li>Gambar produk</li>
+                        <li>Nama produk</li>
+                        <li>Deskripsi singkat atau tipe</li>
+                        <li>Tombol <strong>ORDER</strong></li>
+                        </ul>
+                    </li>
+                    </ol>
+
+                    <h3>🛒 Cara Melihat dan Memilih Harga Produk</h3>
+                    <p>Setelah klik tombol <strong>ORDER</strong> pada produk yang kamu pilih, akan muncul daftar pilihan produk dan harga. Nah, harga produk di MainzStore menggunakan kombinasi <strong>teks dan angka Romawi</strong>. Contoh:</p>
+                    <ul>
+                    <li><strong>I MINGGU Rp 35.000</strong> artinya: 1 minggu = Rp 35.000</li>
+                    <li><strong>XV Day Rp 50.000</strong> artinya: 15 hari = Rp 50.000</li>
+                    <li><strong>I BULAN Rp 70.000</strong> artinya: 1 bulan = Rp 70.000</li>
+                    </ul>
+
+                <table border="1" cellpadding="5" cellspacing="0" style="width:100%; max-width:400px;">
+                    <thead>
+                        <tr>
+                        <th>Angka Romawi</th>
+                        <th>Angka Biasa</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>I</td><td>1</td></tr>
+                        <tr><td>II</td><td>2</td></tr>
+                        <tr><td>III</td><td>3</td></tr>
+                        <tr><td>IV</td><td>4</td></tr>
+                        <tr><td>V</td><td>5</td></tr>
+                        <tr><td>VI</td><td>6</td></tr>
+                        <tr><td>VII</td><td>7</td></tr>
+                        <tr><td>VIII</td><td>8</td></tr>
+                        <tr><td>IX</td><td>9</td></tr>
+                        <tr><td>X</td><td>10</td></tr>
+                        <tr><td>XI</td><td>11</td></tr>
+                        <tr><td>XII</td><td>12</td></tr>
+                        <tr><td>XIII</td><td>13</td></tr>
+                        <tr><td>XIV</td><td>14</td></tr>
+                        <tr><td>XV</td><td>15</td></tr>
+                        <tr><td>XVI</td><td>16</td></tr>
+                        <tr><td>XVII</td><td>17</td></tr>
+                        <tr><td>XVIII</td><td>18</td></tr>
+                        <tr><td>XIX</td><td>19</td></tr>
+                        <tr><td>XX</td><td>20</td></tr>
+                    </tbody>
+                    </table>
+
+                    <p><strong>Contoh:</strong> Jika harga ditulis "XV Day Rp 50.000", artinya durasi 15 hari.</p>
+
+
+                    <h3>💳 Cara Melakukan Pembayaran</h3>
+                    <ol>
+                    <li>Pilih produk lalu klik tombol <strong>ORDER</strong>.</li>
+                    <li>Pilih tipe atau paket yang kamu inginkan.</li>
+                    <li>Setelah itu, kamu akan diarahkan ke halaman pembayaran (atau chat WhatsApp admin).</li>
+                    <li>Metode pembayaran yang tersedia:
+                        <ul>
+                        <li>DANA</li>
+                        <li>ShopeePay</li>
+                        <li>QRIS</li>
+                        <li>PayPal (untuk pembeli luar negeri)</li>
+                        </ul>
+                    </li>
+                    <li>Setelah pembayaran, kirim bukti transfer ke admin via WhatsApp untuk proses cepat.</li>
+                    </ol>
+
+                    <h3>📌Komunitas kami</h3>
+                    
+
+
+                        Join komunitas kami di 
+                        <a href="https://discord.gg/p92erCbJ2H" style="color: #5865F2;">
+                            <i class="fab fa-discord"></i> Discord
+                        </a> atau 
+                        <a href="https://t.me/zaputra1" style="color: #0088cc;">
+                            <i class="fab fa-telegram-plane"></i> Telegram
+                        </a>!
+                        </p>
+
+                    <h3>📌 Tips Tambahan</h3>
+                    <ul>
+                    <li>Selalu baca deskripsi produk sebelum beli.</li>
+                    <li>Pastikan memilih paket yang sesuai, lihat baik-baik angka Romawinya.</li>
+                    <li>Jika produk memiliki keterangan "TIPE FILE", artinya file bisa langsung diunduh setelah pembayaran.</li>
+                    <li>Jika "ORIGINAL", artinya produk legal dan resmi (misal: kode redeem, lisensi original, dll).</li>
+                    </ul>
+
+                    <p>💙 Terima kasih sudah berbelanja di <strong>MAINZ STORE</strong>. Kami siap melayani kebutuhan digital kamu dengan cepat dan aman!</p>
+                </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Popup Full-Screen Daftar Harga -->
+        <div id="price-popup" class="popup-fullscreen">
+            <div class="popup-content">
+                <button class="close-btn" onclick="closePopup()">X</button>
+                <h2>Daftar Harga</h2>
+                <p>Ini adalah daftar harga produk yang tersedia di MainzStore.</p>
+
+                <!-- Tabel Daftar Harga -->
+                <table class="price-table">
+                    <thead>
+                        <tr>
+                            <th>Gambar</th>
+                            <th>Produk</th>
+                            <th>Harga</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Feed and Grow Fish -->
+                    <tr>
+                      <td><img src="images/Feed-and-Grow-Fish-pc-free-download.jpg" alt="Feed and Grow Fish" width="50"></td>
+                      <td>Feed Fish</td>
+                      <td>
+                        <ul>
+                          <li>Tipe File: Rp 25.000</li>
+                          <li>Original: Rp 50.000</li>
+                        </ul>
+                      </td>
+                      <td>On</td>
+                    </tr>
+                    
+                    <!-- Laundry Store Simulator -->
+                    <tr>
+                      <td><img src="images/Laundry-Store-Simulator-pc-free-download.jpg" alt="Laundry Store Simulator" width="50"></td>
+                      <td>Laundry Store</td>
+                      <td>
+                        <ul>
+                          <li>Tipe File: Rp 25.000</li>
+                          <li>Original: Rp 50.000</li>
+                        </ul>
+                      </td>
+                      <td>On</td>
+                    </tr>
+                    
+                    <!-- Parking Tycoon Business Simulator -->
+                    <tr>
+                      <td><img src="images/Parking-Tycoon-Business-Simulator-pc-free-download.jpg" alt="Parking Tycoon" width="50"></td>
+                      <td>Parking Tycoon</td>
+                      <td>
+                        <ul>
+                          <li>Tipe File: Rp 25.000</li>
+                          <li>Original: Rp 50.000</li>
+                        </ul>
+                      </td>
+                      <td>On</td>
+                    </tr>
+                    
+                    <!-- PowerWash Simulator -->
+                    <tr>
+                      <td><img src="images/PowerWash-Simulator-pc-free-download.jpg" alt="PowerWash Simulator" width="50"></td>
+                      <td>Power Wash</td>
+                      <td>
+                        <ul>
+                          <li>Tipe File: Rp 25.000</li>
+                          <li>Original: Rp 50.000</li>
+                        </ul>
+                      </td>
+                      <td>On</td>
+                    </tr>
+                    
+                    <!-- Project Zomboid -->
+                    <tr>
+                      <td><img src="images/Project-Zomboid-pc-free-download.jpg" alt="Project Zomboid" width="50"></td>
+                      <td>Zomboid</td>
+                      <td>
+                        <ul>
+                          <li>Tipe File: Rp 25.000</li>
+                          <li>Original: Rp 50.000</li>
+                        </ul>
+                      </td>
+                      <td>On</td>
+                    </tr>
+                    
+                    <!-- Storage Hunter Simulator -->
+                    <tr>
+                      <td><img src="images/Storage-Hunter-Simulator-pc-free-download.jpg" alt="Storage Hunter Simulator" width="50"></td>
+                      <td>Storage Hunter</td>
+                      <td>
+                        <ul>
+                          <li>Tipe File: Rp 25.000</li>
+                          <li>Original: Rp 50.000</li>
+                        </ul>
+                      </td>
+                      <td>On</td>
+                    </tr>
+                    
+                    <!-- Storage Hustle -->
+                    <tr>
+                      <td><img src="images/Storage-Hustle-pc-free-download.jpg" alt="Storage Hustle" width="50"></td>
+                      <td>Storage Hustle</td>
+                      <td>
+                        <ul>
+                          <li>Tipe File: Rp 25.000</li>
+                          <li>Original: Rp 50.000</li>
+                        </ul>
+                      </td>
+                      <td>On</td>
+                    </tr>
+                    
+                    <!-- Subnautica Below Zero -->
+                    <tr>
+                      <td><img src="images/Subnautica-Below-Zero-pc-free-download.jpg" alt="Subnautica Below Zero" width="50"></td>
+                      <td>Subnautica BZ</td>
+                      <td>
+                        <ul>
+                          <li>Tipe File: Rp 25.000</li>
+                          <li>Original: Rp 50.000</li>
+                        </ul>
+                      </td>
+                      <td>On</td>
+                    </tr>
+                    
+                    <!-- Car For Sale Simulator 2023 -->
+                    <tr>
+                      <td><img src="images/Car-For-Sale-Simulator-2023-pc-free-download.jpg" alt="Car For Sale Simulator 2023" width="50"></td>
+                      <td>Car Sale 2023</td>
+                      <td>
+                        <ul>
+                          <li>Tipe File: Rp 25.000</li>
+                          <li>Original: Rp 50.000</li>
+                        </ul>
+                      </td>
+                      <td>On</td>
+                    </tr>
+                    
+                    <!-- Factory Outlet Simulator -->
+                    <tr>
+                      <td><img src="images/Factory-Outlet-Simulator-pc-free-download.jpg" alt="Factory Outlet Simulator" width="50"></td>
+                      <td>Factory Outlet</td>
+                      <td>
+                        <ul>
+                          <li>Tipe File: Rp 25.000</li>
+                          <li>Original: Rp 50.000</li>
+                        </ul>
+                      </td>
+                      <td>On</td>
+                    </tr>
+                    
+                    <!-- Goat Simulator -->
+                    <tr>
+                      <td><img src="images/Goat-Simulator-pc-free-download.jpg" alt="Goat Simulator" width="50"></td>
+                      <td>Goat Sim</td>
+                      <td>
+                        <ul>
+                          <li>Tipe File: Rp 25.000</li>
+                          <li>Original: Rp 50.000</li>
+                        </ul>
+                      </td>
+                      <td>On</td>
+                    </tr>
+                    
+                    <!-- Goat Simulator 3 -->
+                    <tr>
+                      <td><img src="images/Goat-Simulator-3-pc-free-download.jpg" alt="Goat Simulator 3" width="50"></td>
+                      <td>Goat Sim 3</td>
+                      <td>
+                        <ul>
+                          <li>Tipe File: Rp 25.000</li>
+                          <li>Original: Rp 50.000</li>
+                        </ul>
+                      </td>
+                      <td>On</td>
+                    </tr>
+                    
+                    <!-- Gym Simulator 24 -->
+                    <tr>
+                      <td><img src="images/Gym-Simulator-24-pc-free-download.jpg" alt="Gym Simulator 24" width="50"></td>
+                      <td>Gym Sim 24</td>
+                      <td>
+                        <ul>
+                          <li>Tipe File: Rp 25.000</li>
+                          <li>Original: Rp 50.000</li>
+                        </ul>
+                      </td>
+                      <td>On</td>
+                    </tr>
+
+                        <!-- Troublemaker -->
+                    <tr>
+                        <td><img src="images/Troublemaker-pc-free-download.jpg" alt="Troublemaker" width="50"></td>
+                        <td>Troublemaker</td>
+                        <td>
+                            <ul>
+                                <li>Tipe File: Rp 25.000</li>
+                                <li>Original: Rp 50.000</li>
+                            </ul>
+                        </td>
+                        <td>On</td>
+                    </tr>
+
+                    <!-- Police Simulator -->
+                    <tr>
+                        <td><img src="images/Police-Simulator-Patrol-Officers-pc-free-download.jpg" alt="Police Simulator" width="50"></td>
+                        <td>Police Sim</td>
+                        <td>
+                            <ul>
+                                <li>Tipe File: Rp 25.000</li>
+                                <li>Original: Rp 50.000</li>
+                            </ul>
+                        </td>
+                        <td>On</td>
+                    </tr>
+
+                    <!-- Hot Wheels Unleashed -->
+                    <tr>
+                        <td><img src="images/HOT-WHEELS-UNLEASHED-pc-free-download.jpg" alt="Hot Wheels Unleashed" width="50"></td>
+                        <td>Hot Wheels U</td>
+                        <td>
+                            <ul>
+                                <li>Tipe File: Rp 25.000</li>
+                                <li>Original: Rp 50.000</li>
+                            </ul>
+                        </td>
+                        <td>On</td>
+                    </tr>
+
+                    <!-- Hot Wheels Unleashed 2 -->
+                    <tr>
+                        <td><img src="images/HOT-WHEELS-UNLEASHED-2-Turbocharged-pc-free-download.jpg" alt="Hot Wheels Unleashed 2" width="50"></td>
+                        <td>Hot Wheels U2</td>
+                        <td>
+                            <ul>
+                                <li>Tipe File: Rp 25.000</li>
+                                <li>Original: Rp 50.000</li>
+                            </ul>
+                        </td>
+                        <td>On</td>
+                    </tr>
+
+                    <!-- Hot Wheels Monster Trucks -->
+                    <tr>
+                        <td><img src="images/Hot-Wheels-Monster-Trucks-Stunt-Mayhem-pc-free-download.jpg" alt="Hot Wheels Monster Trucks" width="50"></td>
+                        <td>Hot Wheels MT</td>
+                        <td>
+                            <ul>
+                                <li>Tipe File: Rp 25.000</li>
+                                <li>Original: Rp 50.000</li>
+                            </ul>
+                        </td>
+                        <td>On</td>
+                    </tr>
+
+                    <!-- Gas Station Simulator -->
+                    <tr>
+                        <td><img src="images/Gas-Station-Simulator-pc-free-download.jpg" alt="Gas Station Simulator" width="50"></td>
+                        <td>Gas Station S</td>
+                        <td>
+                            <ul>
+                                <li>Tipe File: Rp 25.000</li>
+                                <li>Original: Rp 50.000</li>
+                            </ul>
+                        </td>
+                        <td>On</td>
+                    </tr>
+
+                    <!-- Five Hearts Under One Roof -->
+                    <tr>
+                        <td><img src="images/Five-Hearts-Under-One-Roof-pc-free-download.jpg" alt="Five Hearts Under One Roof" width="50"></td>
+                        <td>5 Hearts</td>
+                        <td>
+                            <ul>
+                                <li>Tipe File: Rp 25.000</li>
+                                <li>Original: Rp 50.000</li>
+                            </ul>
+                        </td>
+                        <td>On</td>
+                    </tr>
+
+                    <!-- Fight School Simulator -->
+                    <tr>
+                        <td><img src="images/Fight-School-Simulator-pc-free-download.jpg" alt="Fight School Simulator" width="50"></td>
+                        <td>Fight School</td>
+                        <td>
+                            <ul>
+                                <li>Tipe File: Rp 25.000</li>
+                                <li>Original: Rp 50.000</li>
+                            </ul>
+                        </td>
+                        <td>On</td>
+                    </tr>
+
+                    <!-- Empires of the Undergrowth -->
+                    <tr>
+                        <td><img src="images/Empires-Of-The-Undergrowth-pc-free-download.jpg" alt="Empires of the Undergrowth" width="50"></td>
+                        <td>Empires of the U</td>
+                        <td>
+                            <ul>
+                                <li>Tipe File: Rp 25.000</li>
+                                <li>Original: Rp 50.000</li>
+                            </ul>
+                        </td>
+                        <td>On</td>
+                    </tr>
+
+                    <!-- Animal Revolt Battle Simulator -->
+                    <tr>
+                        <td><img src="images/Animal-Revolt-Battle-Simulator-pc-free-download.jpg" alt="Animal Revolt Battle Simulator" width="50"></td>
+                        <td>ARBS</td>
+                        <td>
+                            <ul>
+                                <li>Tipe File: Rp 25.000</li>
+                                <li>Original: Rp 50.000</li>
+                            </ul>
+                        </td>
+                        <td>On</td>
+                    </tr>
+
+                        <!-- Minecraft -->
+                        <tr>
+                            <td><img src="images/game_minecraft_java_and_bedrock_edition_original_pc_redeem_code_full01_q17kqtkg.webp" alt="Minecraft" width="50"></td>
+                            <td>Minecraft</td>
+                            <td>
+                                <ul>
+                                    <li>Tipe File: Rp 25.000</li>
+                                    <li>Original: Rp 50.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                           
+                        </tr>
+
+                        <!-- Inzoi -->
+                        <tr>
+                            <td><img src="images/inzoi.jpg" alt="Inzoi" width="50"></td>
+                            <td>Inzoi</td>
+                            <td>
+                                <ul>
+                                    <li>Tipe File: Rp 30.000</li>
+                                    <li>Original: Rp 70.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                           
+                        </tr>
+
+                        <!-- SUPERCAR -->
+                        <tr>
+                            <td><img src="images/Supercar-Collection-Simulator-pc-free-download.jpg" alt="SUPERCAR" width="50"></td>
+                            <td>SUPERCAR</td>
+                            <td>
+                                <ul>
+                                    <li>Tipe File: Rp 25.000</li>
+                                    <li>Original: Rp 50.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                           
+                        </tr>
+
+                        <!-- Schedule I -->
+                        <tr>
+                            <td><img src="images/Schedule.jpg" alt="Schedule I" width="50"></td>
+                            <td>Schedule I</td>
+                            <td>
+                                <ul>
+                                    <li>Tipe File: Rp 30.000</li>
+                                    <li>Original: Rp 80.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                            
+                        </tr>
+
+                        <!-- Raft -->
+                        <tr>
+                            <td><img src="images/Raft-pc-free-download.jpg" alt="Raft" width="50"></td>
+                            <td>Raft</td>
+                            <td>
+                                <ul>
+                                    <li>Tipe File: Rp 25.000</li>
+                                    <li>Original: Rp 50.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                            
+                        </tr>
+
+                        <!-- Supermarket -->
+                        <tr>
+                            <td><img src="images/Supermarket-Simulator-pc-free-download.jpg" alt="Supermarket" width="50"></td>
+ 
+                            <td>Supermarket</td>
+                            <td>
+                                <ul>
+                                    <li>Tipe File: Rp 25.000</li>
+                                    <li>Original: Rp 50.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                           
+                        </tr>
+
+                        <!-- TCG -->
+                        <tr>
+                            <td><img src="images/TCG-Card-Shop-Simulator-pc-free-download.jpg" alt="TCG" width="50"></td>
+ 
+                            <td>TCG</td>
+                            <td>
+                                <ul>
+                                    <li>Tipe File: Rp 25.000</li>
+                                    <li>Original: Rp 50.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                           
+                        </tr>
+                        
+                        <!-- Thief -->
+                        <tr>
+                            <td><img src="images/Thief-Simulator-pc-free-download.jpg" alt="Thief" width="50"></td>
+ 
+                            <td>Thief</td>
+                            <td>
+                                <ul>
+                                    <li>Tipe File: Rp 25.000</li>
+                                    <li>Original: Rp 50.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                           
+                        </tr>
+
+                        <!-- Internet -->
+                        <tr>
+                            <td><img src="images/Internet-Cafe-Simulator-pc-download.jpg" alt="Internet" width="50"></td>
+ 
+                            <td>Internet</td>
+                            <td>
+                                <ul>
+                                    <li>Tipe File: Rp 25.000</li>
+                                    <li>Original: Rp 50.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                           
+                        </tr>
+
+                        <!-- Internet 2 -->
+                        <tr>
+                            <td><img src="images/Internet-Cafe-Simulator-2-pc-free-download.jpg" alt="Internet 2" width="50"></td>
+ 
+                            <td>Internet 2</td>
+                            <td>
+                                <ul>
+                                    <li>Tipe File: Rp 25.000</li>
+                                    <li>Original: Rp 50.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                           
+                        </tr>
+                                                <!-- pumping -->
+                        <tr>
+                            <td><img src="images/Pumping-Simulator-2-pc-free-download.jpg" alt="Internet 2" width="50"></td>
+ 
+                            <td>Pumping 2</td>
+                            <td>
+                                <ul>
+                                    <li>Tipe File: Rp 25.000</li>
+                                    <li>Original: Rp 50.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                        </tr>
+                        <!-- Motel -->
+                        <tr>
+                            <td><img src="images/Motel-Manager-Simulator-pc-free-download.jpg" alt="Motel" width="50"></td>
+                            <td>Motel</td>
+                            <td>
+                                <ul>
+                                    <li>Tipe File: Rp 25.000</li>
+                                    <li>Original: Rp 50.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                        </tr>
+
+                        <!-- Clothing Store -->
+                        <tr>
+                            <td><img src="images/Clothing-Store-Simulator-pc-free-download.jpg" alt="Clothing Store" width="50"></td>
+                            <td>Clothing Store</td>
+                            <td>
+                                <ul>
+                                    <li>Tipe File: Rp 25.000</li>
+                                    <li>Original: Rp 50.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                        </tr>
+
+                        <!-- Euro 2 -->
+                        <tr>
+                            <td><img src="images/Euro-Truck-Simulator-2-pc-free-download.jpg" alt="Euro 2" width="50"></td>
+                            <td>Euro 2</td>
+                            <td>
+                                <ul>
+                                    <li>Tipe File: Rp 25.000</li>
+                                    <li>Original: Rp 50.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                        </tr>
+
+                        <!-- GTA V -->
+                        <tr>
+                            <td><img src="images/gta v.png" alt="GTA V" width="50"></td>
+                            <td>GTA V</td>
+                            <td>
+                                <ul>
+                                    <li>Tipe File: Rp 25.000</li>
+                                    <li>Original: Rp 50.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                        </tr>
+
+                        <!-- GTA IV -->
+                        <tr>
+                            <td><img src="images/gta 4.jpg" alt="GTA IV" width="50"></td>
+                            <td>GTA IV</td>
+                            <td>
+                                <ul>
+                                    <li>Tipe File: Rp 25.000</li>
+                                    <li>Original: Rp 50.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                        </tr>
+
+                        <!-- GTA III -->
+                        <tr>
+                            <td><img src="images/gta 3.png" alt="GTA III" width="50"></td>
+                            <td>GTA III</td>
+                            <td>
+                                <ul>
+                                    <li>Tipe File: Rp 25.000</li>
+                                    <li>Original: Rp 50.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                        </tr>
+
+                        <!-- GTA VC -->
+                        <tr>
+                            <td><img src="images/gta vc.png" alt="GTA VC" width="50"></td>
+                            <td>GTA VC</td>
+                            <td>
+                                <ul>
+                                    <li>Tipe File: Rp 25.000</li>
+                                    <li>Original: Rp 50.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                        </tr>
+
+                        <!-- GTA SA -->
+                        <tr>
+                            <td><img src="images/gta sa bisasah.png" alt="GTA SA" width="50"></td>
+                            <td>GTA SA</td>
+                            <td>
+                                <ul>
+                                    <li>Tipe File: Rp 25.000</li>
+                                    <li>Original: Rp 50.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                        </tr>
+
+                        <!-- GTA SA Trilogy -->
+                        <tr>
+                            <td><img src="images/gta sa the.png" alt="GTA SA Trilogy" width="50"></td>
+                            <td>GTA SA Trilogy</td>
+                            <td>
+                                <ul>
+                                    <li>Tipe File: Rp 25.000</li>
+                                    <li>Original: Rp 50.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                        </tr>
+
+                        <!-- WTV -->
+                        <tr>
+                            <td><img src="images/wtv.png" alt="WTV" width="50"></td>
+                            <td>WTV</td>
+                            <td>
+                                <ul>
+                                    <li>Saring 1 Bulan: Rp 15.000</li>
+                                    <li>Privat 1 Bulan: Rp 25.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                           
+                        </tr>
+
+                        <!-- YouTube -->
+                        <tr>
+                            <td><img src="images/pngtree-youtube-icon-social-media-png-image_9015287.png" alt="YouTube" width="50"></td>
+                            <td>YouTube</td>
+                            <td>
+                                <ul>
+                                    <li>1 Bulan: Rp 25.000</li>
+                                    <li>3 Bulan: Rp 65.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                            
+                        </tr>
+
+                        <!-- Netflix -->
+                        <tr>
+                            <td><img src="images/netflix.png" alt="Netflix" width="50"></td>
+                            <td>Netflix</td>
+                            <td>
+                                <ul>
+                                    <li>1 Bulan Private: Rp 25.000</li>
+                                    <li>1 Bulan Private: Rp 35.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                             
+                        </tr>
+
+                        <!-- Bstation -->
+                        <tr>
+                            <td><img src="images/bstation.png" alt="BSTATION" width="50"></td>
+                            <td>BSTATION</td>
+                            <td>
+                                <ul>
+                                    <li>1 Bulan: Rp 25.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                             
+                        </tr>
+
+                        <!-- Spotify -->
+                        <tr>
+                            <td><img src="images/spotify.png" alt="Spotify" width="50"></td>
+                            <td>Spotify</td>
+                            <td>
+                                <ul>
+                                    <li>1 Bulan: Rp 25.000</li>
+                                    <li>2 Bulan: Rp 35.000</li>
+                                    <li>4 Bulan: Rp 55.000</li>
+                                    <li>6 Bulan: Rp 80.000</li>
+                                    <li>12 Bulan: Rp 110.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                            
+                        </tr>
+
+                        <!-- DRAMABOX -->
+                        <tr>
+                            <td><img src="images/th (4).jfif" alt="DRAMABOX" width="50"></td>
+                            <td>DRAMABOX</td>
+                            <td>
+                                <ul>
+                                    <li>1 Bulan Private: Rp 25.000</li>
+                                    <li>2 Bulan Private: Rp 45.000</li>
+                                    <li>1 Bulan Saring: Rp 15.000</li>
+                                    <li>2 Bulan Sharing: Rp 28.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                             
+                        </tr>
+
+                        <!-- CAPCUT -->
+                        <tr>
+                            <td><img src="images/Logo Aplikasi Capcut.png" alt="CAPCUT" width="50"></td>
+                            <td>CAPCUT</td>
+                            <td>
+                                <ul>
+                                    <li>1 Bulan: Rp 25.000</li>
+                                    <li>1 Tahun: Rp 100.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                            
+                        </tr>
+
+                        <!-- VISION+ -->
+                        <tr>
+                            <td><img src="images/Vision-APK-Logo-1.png" alt="VISION+" width="50"></td>
+                            <td>VISION+</td>
+                            <td>
+                                <ul>
+                                    <li>1 Bulan: Rp 15.000</li>
+                                    <li>3 Bulan: Rp 26.000</li>
+                                    <li>6 Bulan: Rp 50.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                             
+                        </tr>
+
+                        <!-- GETCONTACT -->
+                        <tr>
+                            <td><img src="images/Getcontac.png" alt="GETCONTACT" width="50"></td>
+                            <td>GETCONTACT</td>
+                            <td>
+                                <ul>
+                                    <li>1 Bulan: Rp 25.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                             
+                        </tr>
+
+                        <!-- CANVA -->
+                        <tr>
+                            <td><img src="images/th.jpg" alt="CANVA" width="50"></td>
+                            <td>CANVA</td>
+                            <td>
+                                <ul>
+                                    <li>1 Bulan: Rp 15.000</li>
+                                    <li>2 Bulan: Rp 25.000</li>
+                                    <li>3 Bulan: Rp 35.000</li>
+                                    <li>1 Tahun: Rp 55.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                            
+                        </tr>
+
+                        <!-- CHAT GPT -->
+                        <tr>
+                            <td><img src="images/black-gpt-chat-logo-on-white-background-logo-illustration-free-vector.jpg" alt="CHAT GPT" width="50"></td>
+                            <td>CHAT GPT</td>
+                            <td>
+                                <ul>
+                                    <li>1 Bulan: Rp 25.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                             
+                        </tr>
+                        <!-- MLBB - Skin Expired -->
+                        <tr>
+                            <td><img src="images/mlbb.jpg" alt="MLBB" width="50"></td>
+                            <td>MLBB (Skin Expired)</td>
+                            <td>
+                                <ul>
+                                    <li>I BULAN: Rp 70.000</li>
+                                    <li>XV Day: Rp 50.000</li>
+                                    <li>I MINGU: Rp 35.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                        </tr>
+
+                        <!-- MLBB - VIP Full Fitur -->
+                        <tr>
+                            <td><img src="images/mlbb.jpg" alt="MLBB" width="50"></td>
+                            <td>MLBB (VIP Full Fitur)</td>
+                            <td>
+                                <ul>
+                                    <li>I Tahun: Rp 400.000</li>
+                                    <li>I BULAN: Rp 70.000</li>
+                                    <li>XV Day: Rp 50.000</li>
+                                    <li>I MINGU: Rp 35.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                        </tr>
+
+                        <!-- MLBB - Rank Booster VIP -->
+                        <tr>
+                            <td><img src="images/mlbb.jpg" alt="MLBB" width="50"></td>
+                            <td>MLBB (Rank Booster VIP)</td>
+                            <td>
+                                <ul>
+                                    <li>I Tahun: Rp 700.000</li>
+                                    <li>I BULAN: Rp 70.000</li>
+                                    <li>XV Day: Rp 50.000</li>
+                                    <li>I MINGU: Rp 35.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                        </tr>
+
+                        <!-- PUBG -->
+                        <tr>
+                            <td><img src="images/images.jpg" alt="PUBG" width="50"></td>
+                            <td>PUBG</td>
+                            <td>
+                                <ul>
+                                    <li>I-III SESOUN: Rp 250.000</li>
+                                    <li>III TAHUN: Rp 900.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                        </tr>
+
+                        <!-- PHOTOSHOP -->
+                        <tr>
+                            <td><img src="images/pt.png" alt="PHOTOSHOP" width="50"></td>
+                            <td>PHOTOSHOP</td>
+                            <td>
+                                <ul>
+                                    <li>Permanet: Rp 25.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                        </tr>
+
+                        <!-- ILLUSTRATOR -->
+                        <tr>
+                            <td><img src="images/adobe-illustrator-5977785_1280.webp" alt="ILLUSTRATOR" width="50"></td>
+                            <td>ILLUSTRATOR</td>
+                            <td>
+                                <ul>
+                                    <li>Permanet: Rp 25.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                        </tr>
+
+                        <!-- INDESIGN -->
+                        <tr>
+                            <td><img src="images/adobe-id-5.png" alt="INDESIGN" width="50"></td>
+                            <td>INDESIGN</td>
+                            <td>
+                                <ul>
+                                    <li>Permanet: Rp 25.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                        </tr>
+
+                        <!-- PREMIERE PRO -->
+                        <tr>
+                            <td><img src="images/pr.png" alt="PREMIERE PRO" width="50"></td>
+                            <td>PREMIERE PRO</td>
+                            <td>
+                                <ul>
+                                    <li>Permanet: Rp 25.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                        </tr>
+
+                        <!-- AFTER EFFECTS -->
+                        <tr>
+                            <td><img src="images/AE.png" alt="AFTER EFFECTS" width="50"></td>
+                            <td>AFTER EFFECTS</td>
+                            <td>
+                                <ul>
+                                    <li>Permanet: Rp 25.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                        </tr>
+
+                        <!-- AUDITION -->
+                        <tr>
+                            <td><img src="images/au.png" alt="AUDITION" width="50"></td>
+                            <td>AUDITION</td>
+                            <td>
+                                <ul>
+                                    <li>Permanet: Rp 25.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                        </tr>
+
+                        <!-- LIGHTROOM -->
+                        <tr>
+                            <td><img src="images/lr.webp" alt="LIGHTROOM" width="50"></td>
+                            <td>LIGHTROOM</td>
+                            <td>
+                                <ul>
+                                    <li>Permanet: Rp 25.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                        </tr>
+
+                        <!-- IDM -->
+                        <tr>
+                            <td><img src="images/idm.jpg" alt="IDM" width="50"></td>
+                            <td>IDM</td>
+                            <td>
+                                <ul>
+                                    <li>Permanet: Rp 25.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                        </tr>
+
+                        <!-- COREL DRAW 7 -->
+                        <tr>
+                            <td><img src="images/CorelDRAW-2021-Splash.png" alt="CORELDRAW 7" width="50"></td>
+                            <td>CORELDRAW 7</td>
+                            <td>
+                                <ul>
+                                    <li>Permanet: Rp 25.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                        </tr>
+
+                        <!-- COREL DRAW 87 -->
+                        <tr>
+                            <td><img src="images/CorelDRAW-2021-Splash.png" alt="CORELDRAW 87" width="50"></td>
+                            <td>CORELDRAW 87</td>
+                            <td>
+                                <ul>
+                                    <li>Permanet: Rp 25.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                        </tr>
+
+                        <!-- ADOBE ORIGINAL -->
+                        <tr>
+                            <td><img src="images/AD.png" alt="ADOBE" width="50"></td>
+                            <td>ADOBE (Original)</td>
+                            <td>
+                                <ul>
+                                    <li>VIX Day: Rp 50.000</li>
+                                    <li>I Bulan: Rp 80.000</li>
+                                </ul>
+                            </td>
+                            <td>On</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <!-- Popup Full-Screen Syarat & Ketentuan -->
+        <div id="terms-popup" class="popup-fullscreen">
+            <div class="popup-content">
+                <button class="close-btn" onclick="closePopup()">X</button>
+                <h2>Syarat & Ketentuan</h2>
+
+<p>Selamat datang di <a href="https://mainzstore.biz.id" style="color: #00aeff;">MAINZ STORE</a>!</p>
+
+<p>Dengan mengakses situs web ini, Anda dianggap telah membaca, memahami, dan menyetujui seluruh syarat dan ketentuan yang berlaku. Jika Anda tidak menyetujui salah satu bagian dari ketentuan ini, mohon untuk tidak melanjutkan penggunaan situs.</p>
+
+<h3>Cookies</h3>
+<p>MAINZ STORE menggunakan cookies untuk meningkatkan pengalaman pengguna. Dengan mengakses situs ini, Anda setuju dengan penggunaan cookies sesuai dengan Kebijakan Privasi kami.</p>
+<p>Cookies membantu kami menyimpan informasi kunjungan pengguna, serta mendukung fitur tertentu di website. Beberapa mitra iklan atau afiliasi kami juga mungkin menggunakan cookies mereka sendiri.</p>
+
+<h3>Lisensi</h3>
+<p>Kecuali dinyatakan lain, semua konten dan hak kekayaan intelektual di MAINZ STORE dimiliki oleh MAINZ STORE dan/atau pemberi lisensinya. Seluruh hak cipta dilindungi undang-undang.</p>
+<p>Anda diperbolehkan mengakses konten di MAINZ STORE hanya untuk penggunaan pribadi, dengan batasan berikut:</p>
+
+<ul>
+  <li>Tidak boleh menerbitkan ulang konten dari MAINZ STORE.</li>
+  <li>Tidak boleh menjual, menyewakan, atau memberikan lisensi ulang terhadap konten dari MAINZ STORE.</li>
+  <li>Tidak boleh menggandakan atau menyalin konten untuk tujuan komersial.</li>
+  <li>Tidak boleh menyebarkan ulang konten dari MAINZ STORE tanpa izin.</li>
+</ul>
+
+<p>Perjanjian ini mulai berlaku sejak Anda pertama kali mengakses situs kami.</p>
+
+            </div>
+        </div>
+
+        <!-- JavaScript -->
+        <script>
+        // Function to open the popup based on the ID passed
+        function openPopup(popupId) {
+            // Hide all popups first
+            let allPopups = document.querySelectorAll('.popup-fullscreen');
+            allPopups.forEach(popup => popup.style.display = 'none');
+
+            // Show the specific popup
+            let popup = document.getElementById(popupId + '-popup');
+            if (popup) {
+                popup.style.display = 'block';
+            }
+        }
+
+        // Function to close the popup
+        function closePopup() {
+            let popups = document.querySelectorAll('.popup-fullscreen');
+            popups.forEach(popup => popup.style.display = 'none');
+        }
+
+        </script>
+
+</body>
+</html>
