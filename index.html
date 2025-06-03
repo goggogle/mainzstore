@@ -1386,23 +1386,19 @@
         }
 
         // Fungsi untuk menampilkan produk berdasarkan kategori yang diklik
-        function toggleCategoryProducts(categoryId) {
-            // Tutup semua kategori produk terlebih dahulu
+             function toggleCategoryProducts(categoryId) {
             const allCategories = document.querySelectorAll('.category-products');
+
             allCategories.forEach(cat => {
-                if (cat.id !== categoryId) {
+                if (cat.id === categoryId) {
+                    // Buka yang diklik dan tutup yang lainnya
+                    cat.style.display = 'grid';
+                } else {
                     cat.style.display = 'none';
                 }
             });
-
-            // Tampilkan atau sembunyikan kategori yang diklik
-            const selected = document.getElementById(categoryId);
-            if (selected.style.display === 'grid') {
-                selected.style.display = 'none';
-            } else {
-                selected.style.display = 'grid';
-            }
         }
+
 
         // Fungsi untuk pencarian produk
         function searchProducts() {
