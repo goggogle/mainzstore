@@ -501,6 +501,33 @@
             color: red;
             font-weight: bold;
         }
+        .preview-btn {
+            background-color: #007bff; /* Biru */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-right: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .download-btn {
+            background-color: #28a745; /* Hijau */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .preview-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .download-btn:hover {
+            background-color: #1c7c31;
+        }
+
 
 
         /* Responsiveness for smaller devices */
@@ -552,7 +579,18 @@
                 <i class="fa fa-cogs"></i>
                 <h3>Software</h3>
             </div>
-        </div>
+            <!-- Kategori Game Download -->
+            <div class="category-item" onclick="toggleCategoryProducts('gameDownload')">
+                <i class="fa fa-download"></i>
+                <h3>Game Download</h3>
+            </div>
+
+            <!-- Kategori APK Download -->
+            <div class="category-item" onclick="toggleCategoryProducts('apkDownload')">
+                <i class="fa fa-download"></i>
+                <h3>APK Download</h3>
+            </div>
+              </div>
 
             <!-- Game PC Products Added -->
            <div id="gamePC" class="category-products">
@@ -665,7 +703,7 @@
                 <img src="images/Troublemaker-pc-free-download.jpg" alt="Troublemaker">
                 <h4>Troublemaker</h4>
                 <p class="price">Tipe File & Original</p>
-               <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+               <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('Troublemaker', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
             </div>
 
             <!-- Police Simulator -->
@@ -673,7 +711,7 @@
                 <img src="images/Police-Simulator-Patrol-Officers-pc-free-download.jpg" alt="Police Simulator">
                 <h4>Police Sim</h4>
                 <p class="price">Tipe File & Original</p>
-                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('Police Simulator', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
             </div>
 
             <!-- Hot Wheels Unleashed -->
@@ -681,7 +719,7 @@
                 <img src="images/HOT-WHEELS-UNLEASHED-pc-free-download.jpg" alt="Hot Wheels Unleashed">
                 <h4>Hot Wheels U</h4>
                 <p class="price">Tipe File & Original</p>
-               <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+               <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('Hot Wheels Unleashed', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
             </div>
 
             <!-- Hot Wheels Unleashed 2 -->
@@ -689,7 +727,7 @@
                 <img src="images/HOT-WHEELS-UNLEASHED-2-Turbocharged-pc-free-download.jpg" alt="Hot Wheels Unleashed 2">
                 <h4>Hot Wheels U2</h4>
                 <p class="price">Tipe File & Original</p>
-                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('Hot Wheels Unleashed 2', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
             </div>
 
             <!-- Hot Wheels Monster Trucks -->
@@ -697,7 +735,7 @@
                 <img src="images/Hot-Wheels-Monster-Trucks-Stunt-Mayhem-pc-free-download.jpg" alt="Hot Wheels Monster Trucks">
                 <h4>Hot Wheels MT</h4>
                 <p class="price">Tipe File & Original</p>
-                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('Hot Wheels Monster Trucks', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
             </div>
 
             <!-- Gas Station Simulator -->
@@ -705,7 +743,7 @@
                 <img src="images/Gas-Station-Simulator-pc-free-download.jpg" alt="Gas Station Simulator">
                 <h4>Gas Station S</h4>
                 <p class="price">Tipe File & Original</p>
-                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('Gas Station Simulator', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
             </div>
 
             <!-- Five Hearts Under One Roof -->
@@ -713,7 +751,7 @@
                 <img src="images/Five-Hearts-Under-One-Roof-pc-free-download.jpg" alt="Five Hearts Under One Roof">
                 <h4>5 Hearts</h4>
                 <p class="price">Tipe File & Original</p>
-                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('Five Hearts', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
             </div>
 
             <!-- Fight School Simulator -->
@@ -721,7 +759,7 @@
                 <img src="images/Fight-School-Simulator-pc-free-download.jpg" alt="Fight School Simulator">
                 <h4>Fight School</h4>
                 <p class="price">Tipe File & Original</p>
-               <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+               <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('Fight School', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
             </div>
 
             <!-- Empires of the Undergrowth -->
@@ -729,7 +767,7 @@
                 <img src="images/Empires-Of-The-Undergrowth-pc-free-download.jpg" alt="Empires of the Undergrowth">
                 <h4>Empires of the U</h4>
                 <p class="price">Tipe File & Original</p>
-                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('Empires of the', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
             </div>
 
             <!-- Animal Revolt Battle Simulator -->
@@ -737,7 +775,7 @@
                 <img src="images/Animal-Revolt-Battle-Simulator-pc-free-download.jpg" alt="Animal Revolt Battle Simulator">
                 <h4>ARBS</h4>
                 <p class="price">Tipe File & Original</p>
-                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('Animal Revolt', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
             </div>
 
            <!-- minecraft -->
@@ -745,7 +783,7 @@
                 <img src="images/game_minecraft_java_and_bedrock_edition_original_pc_redeem_code_full01_q17kqtkg.webp" alt="Minecraft">
                 <h4>Minecraft</h4>
                 <p class="price">Tipe File & Original</p>
-                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('minecraft', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
             </div>           
 
             <!-- Inzoi -->
@@ -753,7 +791,7 @@
                 <img src="images/inzoi.jpg" alt="Inzoi">
                 <h4>Inzoi</h4>
                 <p class="price">Tipe File & Original</p>
-                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('Inzoi', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
             </div>
 
             <!-- SUPERCAR -->
@@ -769,7 +807,7 @@
                 <img src="images/Schedule.jpg" alt="Schedule I">
                 <h4>Schedule I</h4>
                 <p class="price">Tipe File & Original</p>
-                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('Schedule', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
             </div>
 
             <!-- Raft -->
@@ -777,7 +815,7 @@
                 <img src="images/Raft-pc-free-download.jpg" alt="Raft">
                 <h4>Raft</h4>
                 <p class="price">Tipe File & Original</p>
-                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('Raft', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
             </div>
 
             <!-- Supermarket -->
@@ -785,7 +823,7 @@
                 <img src="images/Supermarket-Simulator-pc-free-download.jpg" alt="Supermarket">
                 <h4>Supermarket</h4>
                 <p class="price">Tipe File & Original</p>
-                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('Supermarket', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
             </div>
 
             <!-- TCG -->
@@ -793,15 +831,15 @@
                 <img src="images/TCG-Card-Shop-Simulator-pc-free-download.jpg" alt="TCG">
                 <h4>TCG</h4>
                 <p class="price">Tipe File & Original</p>
-                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('TCG', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
             </div>
 
-            <!-- Thief -->
+            <!-- Internet -->
             <div class="product">
                 <img src="images/Thief-Simulator-pc-free-download.jpg" alt="Thief">
                 <h4>Thief</h4>
                 <p class="price">Tipe File & Original</p>
-                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('Internet', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
             </div>
 
             <!-- Internet -->
@@ -809,7 +847,7 @@
                 <img src="images/Internet-Cafe-Simulator-pc-download.jpg" alt="Internet">
                 <h4>Internet</h4>
                 <p class="price">Tipe File & Original</p>
-                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('Internet', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
             </div>
 
             <!-- Internet 2 -->
@@ -817,7 +855,7 @@
                 <img src="images/Internet-Cafe-Simulator-2-pc-free-download.jpg" alt="Internet 2">
                 <h4>Internet 2</h4>
                 <p class="price">Tipe File & Original</p>
-                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('Internet 2', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
             </div>
 
             <!-- Pumping 2 -->
@@ -825,14 +863,14 @@
                 <img src="images/Pumping-Simulator-2-pc-free-download.jpg" alt="Pumping 2">
                 <h4>Pumping 2</h4>
                 <p class="price">Tipe File & Original</p>
-                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('Pumping 2', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
             </div>
             <!-- Motel -->
             <div class="product">
                 <img src="images/Motel-Manager-Simulator-pc-free-download.jpg" alt="Motel">
                 <h4>Motel</h4>
                 <p class="price">Tipe File & Original</p>
-                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('Motel', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
             </div>
 
             <!-- Clothing Store -->
@@ -840,7 +878,7 @@
                 <img src="images/Clothing-Store-Simulator-pc-free-download.jpg" alt="Clothing Store">
                 <h4>Clothing Store</h4>
                 <p class="price">Tipe File & Original</p>
-                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('Clothing Store', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
             </div>
 
             <!-- Euro 2 -->
@@ -848,7 +886,7 @@
                 <img src="images/Euro-Truck-Simulator-2-pc-free-download.jpg" alt="Euro 2">
                 <h4>Euro 2</h4>
                 <p class="price">Tipe File & Original</p>
-                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('Euro 2', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
             </div>
 
             <!-- GTA V -->
@@ -856,7 +894,7 @@
                 <img src="images/gta v.png" alt="GTA V">
                 <h4>GTA V</h4>
                 <p class="price">Tipe File & Original</p>
-                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('GTA V', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
             </div>
 
             <!-- GTA IV -->
@@ -864,7 +902,7 @@
                 <img src="images/gta 4.jpg" alt="GTA IV">
                 <h4>GTA IV</h4>
                 <p class="price">Tipe File & Original</p>
-                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('GTA IV', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
             </div>
 
             <!-- GTA III -->
@@ -872,7 +910,7 @@
                 <img src="images/gta 3.png" alt="GTA III">
                 <h4>GTA III</h4>
                 <p class="price">Tipe File & Original</p>
-                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('GTA III', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
             </div>
 
             <!-- GTA VC -->
@@ -880,7 +918,7 @@
                 <img src="images/gta vc.png" alt="GTA Vice City">
                 <h4>GTA VC</h4>
                 <p class="price">Tipe File & Original</p>
-                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('GTA VC', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
             </div>
 
             <!-- GTA SA -->
@@ -888,7 +926,7 @@
                 <img src="images/gta sa bisasah.png" alt="GTA San Andreas">
                 <h4>GTA SA</h4>
                 <p class="price">Tipe File & Original</p>
-                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('GTA SA', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
             </div>
 
             <!-- GTA SA Trilogy -->
@@ -896,7 +934,7 @@
                 <img src="images/gta sa the.png" alt="GTA SA Trilogy">
                 <h4>GTA SA Trilogy</h4>
                 <p class="price">Tipe File & Original</p>
-                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('SUPERCAR', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
+                <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('GTA SA', ['Tipe File Rp 25,000', 'Original Rp 50,000'])">ORDER</button>
             </div>
 
         </div>
@@ -1108,6 +1146,35 @@
                 <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('ADOBE', ['VIX Day Rp 50.000', 'I Bulan Rp 80.000'])">ORDER</button>
             </div>
         </div>
+        <!-- Game Download Section -->
+        <div id="gameDownload" class="category-products">
+            <div class="product">
+                <img src="images/Supercar-Collection-Simulator-pc-free-download.jpg" alt="Game Contoh">
+                <h4>SUPERCAR</h4>
+                <p class="price">Size: 1.2 GB | Platform: Windows</p>
+                <button class="preview-btn" onclick="window.open('https://youtu.be/pmVJn7CuHhc?si=m9uCMdfNXT1jvle1')">Preview</button>
+                <button class="download-btn" onclick="window.open('https://drive.google.com/file/d/1q_j6SsyVzimvrzSjGJe2gCEAhf-TPaJc/view?usp=sharing')">Download</button>
+            </div>
+
+            <div class="product">
+                <img src="images/Supermarket-Simulator-pc-free-download.jpg" alt="Game Contoh">
+                <h4>SUPERMARKET</h4>
+                <p class="price">Size: 987 MB | Platform: Windows</p>
+                <button class="preview-btn" onclick="window.open('https://youtu.be/LGheBoi0apk?si=1GYXmFOtaGlZZAWV')">Preview</button>
+                <button class="download-btn" onclick="window.open('https://drive.google.com/file/d/1Gbe3Jv1byCGscWBRWXf1e-YSdh2XWp8E/view?usp=drive_link')">Download</button>
+            </div>
+        </div>
+        <!-- APK Download Section -->
+        <div id="apkDownload" class="category-products">
+            <div class="product">
+                <img src="images/apk_example.jpg" alt="APK Contoh">
+                <h4>PERBAIKAN</h4>
+                <p class="price">Size: 120 MB | Android 7+</p>
+                <button class="preview-btn" onclick="window.open('https://example.com/apk-preview', '_blank')">Preview</button>
+                <button class="download-btn" onclick="window.open('https://example.com/apk-download', '_blank')">Download</button>
+            </div>
+        </div>
+
     </main>
     <!-- Popup Pilihan Tipe Produk -->
     <div class="popup-modal" id="productPopup">
