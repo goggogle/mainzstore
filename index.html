@@ -541,6 +541,40 @@
                 grid-template-columns: repeat(2, 1fr); /* 2 kolom di mobile */
             }
         }
+
+        .product .button-group {
+            display: flex;
+            gap: 10px; /* jarak antar tombol */
+            margin-top: 10px;
+        }
+
+        .product .button-group button {
+            flex: 1; /* bagi rata ukuran tombol */
+            padding: 10px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .button-group .preview-btn {
+            background-color: #007bff; /* biru */
+        }
+
+        .button-group .download-btn {
+            background-color: #28a745; /* hijau */
+        }
+
+        .button-group .preview-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .button-group .download-btn:hover {
+            background-color: #1c7c31;
+        }
+
     </style>
 </head>
 <body>
@@ -1146,35 +1180,41 @@
                 <button style="background-color: green; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="openProductOptions('ADOBE', ['VIX Day Rp 50.000', 'I Bulan Rp 80.000'])">ORDER</button>
             </div>
         </div>
-        <!-- Game Download Section -->
+       <!-- Game Download Section -->
         <div id="gameDownload" class="category-products">
-            <div class="product">
-                <img src="images/Supercar-Collection-Simulator-pc-free-download.jpg" alt="Game Contoh">
-                <h4>SUPERCAR</h4>
-                <p class="price">Size: 1.2 GB | Platform: Windows</p>
-                <button class="preview-btn" onclick="window.open('https://youtu.be/pmVJn7CuHhc?si=m9uCMdfNXT1jvle1')">Preview</button>
-                <button class="download-btn" onclick="window.open('https://drive.google.com/file/d/1q_j6SsyVzimvrzSjGJe2gCEAhf-TPaJc/view?usp=sharing')">Download</button>
-            </div>
-
-            <div class="product">
-                <img src="images/Supermarket-Simulator-pc-free-download.jpg" alt="Game Contoh">
-                <h4>SUPERMARKET</h4>
-                <p class="price">Size: 987 MB | Platform: Windows</p>
-                <button class="preview-btn" onclick="window.open('https://youtu.be/LGheBoi0apk?si=1GYXmFOtaGlZZAWV')">Preview</button>
-                <button class="download-btn" onclick="window.open('https://drive.google.com/file/d/1Gbe3Jv1byCGscWBRWXf1e-YSdh2XWp8E/view?usp=drive_link')">Download</button>
+        <div class="product">
+            <img src="images/Supercar-Collection-Simulator-pc-free-download.jpg" alt="Game Contoh">
+            <h4>SUPERCAR</h4>
+            <p class="price">Size: 1.2 GB | Platform: Windows</p>
+            <div class="button-group">
+            <button class="preview-btn" onclick="window.open('https://youtu.be/pmVJn7CuHhc?si=m9uCMdfNXT1jvle1')">Preview</button>
+            <button class="download-btn" onclick="window.open('https://drive.google.com/file/d/1q_j6SsyVzimvrzSjGJe2gCEAhf-TPaJc/view?usp=sharing')">Download</button>
             </div>
         </div>
+
+        <div class="product">
+            <img src="images/Supermarket-Simulator-pc-free-download.jpg" alt="Game Contoh">
+            <h4>SUPERMARKET</h4>
+            <p class="price">Size: 987 MB | Platform: Windows</p>
+            <div class="button-group">
+            <button class="preview-btn" onclick="window.open('https://youtu.be/LGheBoi0apk?si=1GYXmFOtaGlZZAWV')">Preview</button>
+            <button class="download-btn" onclick="window.open('https://drive.google.com/file/d/1Gbe3Jv1byCGscWBRWXf1e-YSdh2XWp8E/view?usp=drive_link')">Download</button>
+            </div>
+        </div>
+        </div>
+
         <!-- APK Download Section -->
         <div id="apkDownload" class="category-products">
-            <div class="product">
-                <img src="images/apk_example.jpg" alt="APK Contoh">
-                <h4>PERBAIKAN</h4>
-                <p class="price">Size: 120 MB | Android 7+</p>
-                <button class="preview-btn" onclick="window.open('https://example.com/apk-preview', '_blank')">Preview</button>
-                <button class="download-btn" onclick="window.open('https://example.com/apk-download', '_blank')">Download</button>
+          <div class="product">
+            <img src="images/Supermarket-Simulator-pc-frownload.jpg" alt="Game Contoh">
+            <h4>PERBAIKAN</h4>
+            <p class="price">Size: 987 MB | Platform: Android 10+</p>
+            <div class="button-group">
+            <button class="preview-btn" onclick="window.open('https://youtu.be/LGheBoi0?si=1GYXmFOtaGlZZAWV')">Preview</button>
+            <button class="download-btn" onclick="window.open('https://drive.google.comle/d/1Gbe3Jv1byCGscWBRWXf1e-YSdh2XWp8E/view?usp=drive_link')">Download</button>
             </div>
         </div>
-
+        </div>
     </main>
     <!-- Popup Pilihan Tipe Produk -->
     <div class="popup-modal" id="productPopup">
