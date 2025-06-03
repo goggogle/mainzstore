@@ -1308,18 +1308,24 @@
         }
 
         // Fungsi untuk membuka popup produk dan menampilkan pilihan harga
-        function openProductOptions(productName, prices) {
-            popupOptions.innerHTML = ''; // Kosongkan opsi sebelumnya
+     function openProductOptions(productName, prices) {
+        // Tutup semua popup terlebih dahulu
+        closeProductPopup();
 
-            prices.forEach(price => {
-                const button = document.createElement('button');
-                button.innerText = price;
-                button.onclick = () => {
-                    const priceValue = parseInt(price.replace(/[^\d]/g, '')); // Ambil angka harga dari string
-                    addToCart(productName, priceValue); // Tambahkan ke keranjang
-                };
-                popupOptions.appendChild(button);
-            });
+        // Bersihkan isi popup
+        popupOptions.innerHTML = '';
+
+        // Tambahkan opsi baru
+        prices.forEach(price => {
+            const button = document.createElement('button');
+            button.innerText = price;
+            button.onclick = () => {
+                const priceValue = parseInt(price.replace(/[^\d]/g, ''));
+                addToCart(productName, priceValue);
+                closeProductPopup(); // Tutup popup setelah pilih
+            };
+            popupOptions.appendChild(button);
+        });
 
             // Tampilkan popup produk
             productPopup.style.display = "block";
@@ -1381,8 +1387,21 @@
 
         // Fungsi untuk menampilkan produk berdasarkan kategori yang diklik
         function toggleCategoryProducts(categoryId) {
-            const categoryProducts = document.getElementById(categoryId);
-            categoryProducts.style.display = categoryProducts.style.display === 'grid' ? 'none' : 'grid';
+            // Tutup semua kategori produk terlebih dahulu
+            const allCategories = document.querySelectorAll('.category-products');
+            allCategories.forEach(cat => {
+                if (cat.id !== categoryId) {
+                    cat.style.display = 'none';
+                }
+            });
+
+            // Tampilkan atau sembunyikan kategori yang diklik
+            const selected = document.getElementById(categoryId);
+            if (selected.style.display === 'grid') {
+                selected.style.display = 'none';
+            } else {
+                selected.style.display = 'grid';
+            }
         }
 
         // Fungsi untuk pencarian produk
